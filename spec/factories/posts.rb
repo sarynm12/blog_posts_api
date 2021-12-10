@@ -5,6 +5,6 @@ FactoryBot.define do
     likes { Faker::Number.within(range: 0..2000) }
     popularity { Faker::Number.within(range: 0.0..1.0) }
     reads { Faker::Number.within(range: 0..2000) }
-    tags { [] }
+    tags { ["tech", "health", "sports", "news", "celebrities", "travel", "music", "food"].sample(2) }
   end
 end
