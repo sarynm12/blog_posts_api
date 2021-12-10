@@ -26,7 +26,11 @@ class Api::PostsController < ApplicationController
   end
 
   def sort_by_attribute
-    posts = Post.order("id")
+    attribute = params.keys.first
+    value = params[attribute]
+    direction = params.keys[1]
+    formatted = params[direction].upcase
+    posts = Post.order("#{value} #{formatted}")
     render json: posts
   end
 end
