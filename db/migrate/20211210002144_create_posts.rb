@@ -6,7 +6,7 @@ class CreatePosts < ActiveRecord::Migration[6.1]
       t.integer :likes
       t.float :popularity
       t.integer :reads
-      t.string :tags
+      t.string :tags, array: true, default: []
 
       t.timestamps
     end
