@@ -104,4 +104,13 @@ RSpec.describe "Posts", type: :request do
     expect(posts[2][:reads]).to eq(1242)
     expect(posts[3][:reads]).to eq(1802)
   end
+
+   it 'throws an error if sort by parameter is invalid' do
+    get "/api/posts?sort_by="
+
+    error = { 'error': 'sortBy parameter is invalid' }
+
+    expect(response).to_not be_successful
+    expect(response.status).to eq(400)
+  end
 end

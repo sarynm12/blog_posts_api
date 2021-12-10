@@ -3,14 +3,9 @@ class Api::PostsController < ApplicationController
   def index
     attribute = params.keys.first
     value = params[attribute]
-    if attribute == "tags"
-      if params[:tags].nil? || params[:tags].empty?
-        render json: { 'error': 'Tags parameter is required' }, status: 400
-      else
-        tags_query
-      end
-    elsif attribute == "sort_by"
-      sort_by_attribute
+    case attribute
+    when "tags" then tags_query
+    when "sort_by" then sort_by_query
     end
   end
 
@@ -21,16 +16,24 @@ class Api::PostsController < ApplicationController
   end
 
   def tags_query
-    posts = Post.where("array_to_string(tags, '||') ILIKE :tags", tags: "%#{params[:tags]}%")
-    render json: posts
+    if params[:tags].nil? || params[:tags].empty?
+      render json: { 'error': 'Tags parameter is required' }, status: 400
+    else
+      posts = Post.where("array_to_string(tags, '||') ILIKE :tags", tags: "%#{params[:tags]}%")
+      render json: posts
+    end
   end
 
-  def sort_by_attribute
+  def sort_by_query
     attribute = params.keys.first
     value = params[attribute]
     direction = params.keys[1]
     formatted = params[direction].upcase
-    posts = Post.order("#{value} #{formatted}")
-    render json: posts
+    if value.nil? || value.empty? 
+      render json: { 'error': 'sortBy parameter is invalid' }, status: 400
+    else
+      posts = Post.order("#{value} #{formatted}")
+      render json: posts
+    end
   end
 end
