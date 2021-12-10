@@ -1,10 +1,10 @@
 FactoryBot.define do
   factory :post do
-    author { "MyString" }
-    author_id { 1 }
-    likes { 1 }
-    popularity { 1.5 }
-    reads { 1 }
-    tags { "MyString" }
+    author { Faker::Name.name }
+    author_id { Faker::Number.non_zero_digit }
+    likes { Faker::Number.within(range: 0..2000) }
+    popularity { Faker::Number.within(range: 0.0..1.0) }
+    reads { Faker::Number.within(range: 0..2000) }
+    tags { [] }
   end
 end
