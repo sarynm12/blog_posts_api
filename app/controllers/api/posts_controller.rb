@@ -7,10 +7,10 @@ class Api::PostsController < ApplicationController
       if params[:tags].nil? || params[:tags].empty?
         render json: { 'error': 'Tags parameter is required' }, status: 400
       else
-        split = value.split(/\W+/)
-        posts = Post.where("array_to_string(tags, '||') ILIKE :tags", tags: "%#{params[:tags]}%")
-        render json: posts
+        tags_query
       end
+    elsif attribute == "sort_by"
+      sort_by_attribute
     end
   end
 
@@ -18,5 +18,15 @@ class Api::PostsController < ApplicationController
 
   def post_params
     params.permit(:author, :author_id, :likes, :popularity, :reads, :tags)
+  end
+
+  def tags_query
+    posts = Post.where("array_to_string(tags, '||') ILIKE :tags", tags: "%#{params[:tags]}%")
+    render json: posts
+  end
+
+  def sort_by_attribute
+    posts = Post.order("id")
+    render json: posts
   end
 end
